@@ -34,73 +34,130 @@ What's the time complexity?
  */
 
 function Stack(capacity) {
-    this.storage = {};
-    this.newElId = 1;
-    this.capacity = capacity || 6;
+    this._storage = {};
+    this._count = 1;
+    this._capacity = capacity || Infinity;
     // implement me...
   }
   
   Stack.prototype.push = function(value) {
-    if (this.newElId <= this.capacity) {
-      this.storage[this.newElId] = value;
-      this.newElId++;
-      return this.newElId;
+    if (this._count <= this._capacity) {
+      this._storage[this._count++] = value;
+      return this._count;
     } else {
-      console.log('Max capacity already reached. Remove element before adding a new one.')
+      console.log('Max _capacity already reached. Remove element before adding a new one.')
       return -1;
     }
     // implement me...
   };
-  // Time complexity:
+  // Time complexity: O(1)
   
   Stack.prototype.pop = function() {
     // implement me...
     console.log('POP');
-    this.newElId -= 1; 
-    var elToPop = this.storage[this.newElId]
-    delete this.storage[this.newElId]
-    console.log('Storage', this.storage)
+    var elToPop = this._storage[--this._count]
+    delete this._storage[this._count]
+    if (this._count < 0) this._count = 0;
+    console.log('_storage', this._storage)
     return elToPop;
   };
-  // Time complexity:
+  // Time complexity: O(1)
   
   Stack.prototype.peek = function() {
     // implement me...
-    return this.storage[this.newElId - 1];
+    return this._storage[this._count - 1];
   };
-  // Time complexity:
+  // Time complexity: O(1)
   
   Stack.prototype.count = function() {
     // implement me...
-    console.log(this.newElId - 1)
-    console.log(this.storage)
-    return this.newElId - 1;
+    console.log(this._count - 1)
+    console.log(this._storage)
+    return this._count - 1;
   };
+    // Time complexity: O(1)
 
-  Stack.prototype.contains = function() {
+  Stack.prototype.contains = function(value) {
+    for(val in this._storage) {
+      if (this._storage[val] === value) return true;
+    }
+    return false;
+  }  
+  // Time complexity: O(1)
 
+  Stack.prototype.until = function(value) {
+    var stackNum = 0;
+    for(val in this._storage) {
+      if (this._storage[val] === value) return stackNum;
+      stackNum++;
+    }
+    return null;
   }
-  
+
   var stk = new Stack();
 
-  stk.push('1')
-  stk.push('22')
-  stk.push('333')
-  stk.push('4444')
-  stk.push('55555')
-  stk.push('666666')
-  stk.push('7777777')
-  stk.pop()
-  stk.pop()
-  stk.push('7777777')
-  stk.pop()
-  stk.pop()
-  stk.peek()
-  stk.count()
+
 
   // Time complexity:
+
+// ------------------------------------------------------------------------------------------------
+
+  function MinStack(capacity) {
+    this._storage = {};
+    this._count = 1;
+    this._capacity = capacity || Infinity;
+    this._min = new Stack();
+    // implement me...
+  }
   
+  MinStack.prototype.push = function(value) {
+    if (this._count <= this._capacity) {
+      if (this._min.peek() < value) {
+        this._min.push(this._min.peek())
+      }
+      else {
+        this._min.push(value);
+      }
+      console.log(this._min._storage)
+      this._storage[this._count++] = value;
+      return this._count;
+    } else {
+      console.log('Max _capacity already reached. Remove element before adding a new one.')
+      return -1;
+    }
+    // implement me...
+  };
+  // Time complexity: O(1)
   
+  MinStack.prototype.pop = function() {
+    // implement me...
+    console.log('POP');
+    this._min.pop();
+    console.log(this._min._storage)
+    var elToPop = this._storage[--this._count]
+    delete this._storage[this._count]
+    if (this._count < 0) this._count = 0;
+    console.log('_storage', this._storage)
+    return elToPop;
+  };
+  // Time complexity: O(1)
+  
+  MinStack.prototype.peek = function() {
+    // implement me...
+    return this._storage[this._count - 1];
+  };
+  // Time complexity: O(1)
+  
+  MinStack.prototype.count = function() {
+    // implement me...
+    console.log(this._count - 1)
+    console.log(this._storage)
+    return this._count - 1;
+  };
+    // Time complexity: O(1)
+
+  var ms = new MinStack();
+
   /*
   *** Exercises:
   1. Implement a stack with a min method which returns the minimum element currently in the stack. This method should have O(1) time complexity. Make sure your implementation handles duplicates.
