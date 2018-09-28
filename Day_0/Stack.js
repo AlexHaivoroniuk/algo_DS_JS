@@ -54,25 +54,25 @@ function Stack(capacity) {
   
   Stack.prototype.pop = function() {
     // implement me...
-    console.log('POP');
+    // console.log('POP');
     var elToPop = this._storage[--this._count]
     delete this._storage[this._count]
     if (this._count < 0) this._count = 0;
-    console.log('_storage', this._storage)
+    // console.log('_storage', this._storage)
     return elToPop;
   };
   // Time complexity: O(1)
   
   Stack.prototype.peek = function() {
     // implement me...
-    return this._storage[this._count - 1];
+    return this._storage[this._count - 1] || 0;
   };
   // Time complexity: O(1)
   
   Stack.prototype.count = function() {
     // implement me...
-    console.log(this._count - 1)
-    console.log(this._storage)
+    // console.log(this._count - 1)
+    // console.log(this._storage)
     return this._count - 1;
   };
     // Time complexity: O(1)
@@ -118,7 +118,7 @@ function Stack(capacity) {
       else {
         this._min.push(value);
       }
-      console.log(this._min._storage)
+      // console.log(this._min._storage)
       this._storage[this._count++] = value;
       return this._count;
     } else {
@@ -131,27 +131,32 @@ function Stack(capacity) {
   
   MinStack.prototype.pop = function() {
     // implement me...
-    console.log('POP');
+    // console.log('POP');
     this._min.pop();
-    console.log(this._min._storage)
+    // console.log(this._min._storage)
     var elToPop = this._storage[--this._count]
     delete this._storage[this._count]
     if (this._count < 0) this._count = 0;
-    console.log('_storage', this._storage)
+    // console.log('_storage', this._storage)
     return elToPop;
   };
   // Time complexity: O(1)
   
   MinStack.prototype.peek = function() {
     // implement me...
-    return this._storage[this._count - 1];
+    return this._storage[this._count - 1] || 0;
+  };
+  // Time complexity: O(1)
+  MinStack.prototype.min = function() {
+    // implement me...
+    return this._min.peek();
   };
   // Time complexity: O(1)
   
   MinStack.prototype.count = function() {
     // implement me...
-    console.log(this._count - 1)
-    console.log(this._storage)
+    // console.log(this._count - 1)
+    // console.log(this._storage)
     return this._count - 1;
   };
     // Time complexity: O(1)
@@ -172,3 +177,99 @@ function Stack(capacity) {
      3. no disk can be placed on top of a disk that is smaller than it
   The disks begin on tower#1. Write a function that will move the disks from tower#1 to tower#3 in such a way that none of the constraints are violated.
    */
+
+  // 2. Sort a stack so that its elements are in ascending order.
+  function sortAsc(stack) {
+    var ascStack = new Stack();
+    // console.log(stack)
+    for(var i = stack.count(); i > 0 ; --i) {
+      ascStack.push(stack.pop());
+    }
+    // console.log(ascStack);
+  }
+
+  // 3. Given a string, determine if the parenthesis in the string are balanced.
+  function balancedParens(value) {
+    var openParansStack = new Stack();
+    var closeParansStack = new Stack();
+    for (var i = 0; i < value.length; i++) {
+      if (value.charAt(i) === '(') openParansStack.push('');
+      if (value.charAt(i) === ')') closeParansStack.push('');
+    }
+    return openParansStack.count() === closeParansStack.count();
+  }
+
+  // console.log(balancedParens( 'sqrt(5*(3+8)/(4-2))' )) 
+  // console.log(balancedParens( 'Math.min(5,(6-3))('  )) 
+
+  // 4. Towers of Hanoi
+
+  function moveDisksBetweenTowers(t1, t2) {
+    console.log('moveDisksBetweenTowers');
+    if (t1.peek() === 0) {
+      t1.push(t2.pop());
+    }
+    else if (t2.peek() === 0) {
+      t2.push(t1.pop());
+    }
+    else if (t1.peek() > t2.peek()) {
+      t1.push(t2.pop());
+    } 
+    else {
+      t2.push(t1.pop());
+    } 
+  }
+
+  function TowerOfHanoi(disksNum) {
+    var towerA = new Stack();
+    var towerB = new Stack();
+    var towerC = new Stack();
+
+    for(var i = disksNum; i > 0 ; --i) {
+      towerA.push(i);
+    }
+    console.log(towerA);
+    var i = 0;
+
+    while(towerC.count() !== disksNum) {
+      if (disksNum % 2 === 0) {
+        // even discNum
+        // towerA() <==> towerB()
+        moveDisksBetweenTowers(towerA, towerB);
+        // towerA() <==> towerC()
+        moveDisksBetweenTowers(towerA, towerC);
+        // towerB() <==> towerC()
+        moveDisksBetweenTowers(towerB, towerC);
+      } else {
+        // odd discNum
+        moveDisksBetweenTowers(towerA, towerC);
+        // towerA() <==> towerB()
+        moveDisksBetweenTowers(towerA, towerB);
+        // towerB() <==> towerC()
+        moveDisksBetweenTowers(towerB, towerC);
+      }
+      console.log('>>>', towerA._storage)
+      console.log(')))', towerB._storage)
+      console.log('}}}', towerC._storage)
+      console.log(`-----------[${i}]-----------`);
+      ++i;
+      // if (i > 16) return;
+    }
+  }
+
+  TowerOfHanoi(18)
+
+
+        //   // even discNum
+        // // towerA() <==> towerB()
+        // console.log('A<=>B', towerA.peek() , "|" , towerB.peek());
+        // if (towerA.peek() < towerB.peek()) towerA.push(towerB.pop());
+        // else if (towerA.peek() > towerB.peek()) towerB.push(towerA.pop());
+        // // towerA() <==> towerC()
+        // console.log('A<=>C', towerA.peek() , "|" , towerC.peek());
+        // if (towerA.peek() < towerC.peek()) towerA.push(towerC.pop());
+        // else if (towerA.peek() > towerC.peek())  towerC.push(towerA.pop());
+        // // towerB() <==> towerC()
+        // console.log('B<=>C', towerB.peek() , "|" , towerC.peek());
+        // if (towerB.peek() < towerC.peek()) towerC.push(towerB.pop());
+        // else if (towerB.peek() > towerC.peek()) towerB.push(towerC.pop());
