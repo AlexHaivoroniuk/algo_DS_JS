@@ -44,15 +44,31 @@ function multiplier(arr, num) {
     }
     console.log(arr);
 }
-multiplier([2, 4, 6, 8, 10], 2)
+// multiplier([2, 4, 6, 8, 10], 2)
 function recursiveMultiplier(arr, num) {
-    
+    if (arr.length === 0 ) return arr;
+
+    var last = arr.pop();
+
     recursiveMultiplier(arr, num);
+
+    arr.push(last * num);
+
     return arr;
 }
+recursiveMultiplier([2, 4, 6, 8, 10], 2)
 // recursiveMultiplier([2, 4, 6, 8, 10], 2)
 //6. Write a function 'recursiveReverse' that takes an array and uses recursion to return its contents in reverse
-// function recursiveReverse(arr) {
-    
-// }
+function recursiveReverse(arr) {
+   if (arr.length === 0 ) return arr;
+
+   var first = arr.shift();
+
+   recursiveReverse(arr);
+
+   arr.push(first);
+   console.log(arr)
+
+   return arr;
+}
 // recursiveReverse([2, 4, 6, 8, 10])
