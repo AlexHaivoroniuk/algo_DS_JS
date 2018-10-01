@@ -96,7 +96,9 @@ function Stack(capacity) {
 
   var stk = new Stack();
 
-
+module.exports = {
+  Stack: Stack
+}
 
   // Time complexity:
 
@@ -253,11 +255,10 @@ function Stack(capacity) {
       console.log('}}}', towerC._storage)
       console.log(`-----------[${i}]-----------`);
       ++i;
-      // if (i > 16) return;
     }
   }
 
-  TowerOfHanoi(18)
+  // TowerOfHanoi(18)
 
 
         //   // even discNum
