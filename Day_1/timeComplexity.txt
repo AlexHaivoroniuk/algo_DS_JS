@@ -1,0 +1,28 @@
+for (var i ...) { O(n)
+    1 + 1 // O(1)
+}
+
+for (var i...) { //O(n)
+    for(var j...) { //O(n) | O(n) * O(n)
+        3+3; // O(1) O(1) + O(1)
+        5+6: //O(1)
+    }
+} O(n^2) 
+'O(n^2)*O(2)' 
+
+------------------------------
+
+var countChars = function(str) {
+    var count = 0; // O(1)
+
+    for(var i = 0; i < str.lenght; i++) { O(n)
+        count++; O(1)
+    }
+
+    return count; O(1)
+}
+
+countChars('dance');// O(1) + O(5*n)*O(1) + O(1) 
+countChars('walk');// O(1) + O(5*n)*O(1) + O(1)
+
+

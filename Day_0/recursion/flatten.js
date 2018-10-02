@@ -4,9 +4,15 @@ Implement a function that flattens a nested array.
 flatten([1,[2],[3, [[4]]]]);
 => [1,2,3,4]
 */
+// O(n)
 function flatten(arr) {
-    if (arr.length === 0) return arr;
-    return arr 
+    var flatArr = [];
+    function recurse(value) {
+        if (!Array.isArray(value)) flatArr.push(value);
+        else value.forEach(item => recurse(item));
+    }
+    recurse(arr);
+    return flatArr; 
 }
 
-flatten([1,[2],[3, [[4]]]])
+console.log(flatten([1,[2],[3, [[4]]]])) // {0}
