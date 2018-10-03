@@ -19,3 +19,25 @@ input array: [ 1 2 4 5 9 ]
 subarrays for regular merge sort: [ [1], [2], [4], [5], [9] ]
 subarrays for natural merge sort: [ [1,2], [4,5], [9] ]
 */
+
+/* Pseudo code 
+merge(L, R)
+Rpr = 0
+Lpr = 0
+Output array = []
+Loop until L.ln === Lpr and R.ln === Rpr
+    if L[Lpr] is greater than R[Rpr]
+        Push R to Output array
+        increment Rpr
+    else 
+        pushL[Lpr] into Output array
+        increment Lpr
+
+mergeSort(list) 
+    base case: if list.length < 2, return
+    break then list in to halves L & R
+    Lsorted = mergeSort(L)
+    Rsorted = mergeSort(R)
+    return merge(Lsorted, Rsorted)
+
+        */ 
