@@ -20,13 +20,52 @@ subarrays for regular merge sort: [ [1], [2], [4], [5], [9] ]
 subarrays for natural merge sort: [ [1,2], [4,5], [9] ]
 */
 
+function defaultComparator(a,b) {
+    if (a < b ) return -1;
+    if (a > b) return 1;
+    return 0;
+}
+
+function merge(left, right, compare) {
+    compare = compare || defaultComparator;
+    var iL = 0;
+    var iR = 0;
+    var mergedArr = [];
+    while (mergedArr.length < (left.length + right.length)) {
+        if (left.length === iL) mergedArr = mergedArr.concat(right.slice(iR));
+        else if (right.length === iR) mergedArr = mergedArr.concat(left.slice(iL));
+        else if (compare(left[iL], right[iR]) < 0) mergedArr.push(left[iL++]);
+        else mergedArr.push(right[iR++]) 
+    }
+    return mergedArr;
+}
+
+function mergeSortRecursive(arr, compare) { // O( n*log(n))
+    if (arr.length <=1) return arr;
+    var left = arr.slice(0, arr.length/2);
+    var right = arr.slice(arr.length/2);
+    var lSorted = mergeSortRecursive(left)
+    var rSorted = mergeSortRecursive(right)
+    return merge(lSorted, rSorted, compare);
+}
+
+// console.log(mergeSortRecursive([3,44,38,5,47,15,36,26,27,2,46,4,19,50,48]))
+console.log(mergeSortRecursive([{value: 15}, {value: 10, order: 1}, {value: 10, order: 2}], function(a, b) {
+        if (a.value < b.value ) return -1;
+        if (a.value > b.value) return 1;
+        return 0;
+}))
+
+
+
+
 /* Pseudo code 
 merge(L, R)
 Rpr = 0
 Lpr = 0
 Output array = []
-Loop until L.ln === Lpr and R.ln === Rpr
-    if L[Lpr] is greater than R[Rpr]
+Loop until L.ln + R.ln > array.ln
+   if L[Lpr] is greater than R[Rpr]
         Push R to Output array
         increment Rpr
     else 
@@ -40,4 +79,16 @@ mergeSort(list)
     Rsorted = mergeSort(R)
     return merge(Lsorted, Rsorted)
 
-        */ 
+
+mergeSort(list) 
+    initialize n to the length of the list
+    base case if n < 2, just return
+    initialise mid to n/2
+    left = left slice of array to mid - 1 
+    left = left slice of array mid to n - 1 
+    mergeSort(left)
+    mergeSort(right)
+    
+    merge(left, right)
+------------------------------------------------
+*/
