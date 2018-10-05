@@ -56,37 +56,40 @@ partition(arr, first, last)
 
 */
 function swap(arr, i, j) {
+    if (i === j) return;
     var tmp  = arr[i];
     arr[i] = arr[j];
     arr[j] = tmp;
 }
 
 function partition(arr, lo, hi) {
-    var pivotLoc = lo,
-        pivot = hi;
-    for(var i = pivotLoc; i < hi; ++i) {
-        if (arr[i] < arr[pivot]) {
+    var pivot = arr[hi],
+        pivotLoc = lo;
+    for(var i = lo; i < hi; ++i) {
+        var val = arr[i]
+        if (val <= pivot) {
             swap(arr, pivotLoc, i);
-            ++pivotLoc;
-        } 
-        else {
-            swap(arr, pivotLoc, pivot)
-            swap(arr, pivotLoc, arr.length-pivotLoc-i)
+            pivotLoc++;
         }
-        if (arr[pivot] > arr[pivotLoc] && arr[pivot] < arr[pivot+1]) break;
     }
-    return pivot;
+    swap(arr, pivotLoc, hi);
+    return pivotLoc;
 }
-
 function quickSort(arr, low, high) {
-    if (low < high) {
-        var piv = partition(arr,low, high);
+    if(low === undefined) low = 0;
+    if(high === undefined) high = arr.length-1;
 
-        quickSort(arr, piv, high)
+    if (low < high) {
+        var p = partition(arr, low, high);
+
+        quickSort(arr, low, p-1);
+        quickSort(arr, p+1, high);
     }
-    return arr;
+    if (high-low === arr.length-1) return arr; 
 }
 
-var inArr = [65, 100, 36, 82, 46, 37, 61, 58, 34, 53, 18, 83, 66, 96, 26, 77, 97, 13, 11, 8]; 
+// var inArr = [65, 100, 36, 82, 46, 37, 61, 58, 34, 53, 18, 83, 66, 96, 26, 77, 97, 13, 11, 88]; 
+// var inArr = [2, 9, 10, 6, 4, 7, 1, 5, 8, 3]; 
+var inArr = [5,3,1,4,2]; 
 
-console.log(quickSort(inArr, 0, inArr.length-1));
+console.log(quickSort(inArr));
