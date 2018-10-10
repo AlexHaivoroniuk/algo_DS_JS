@@ -28,6 +28,15 @@ Given a dictionary, create a prefix tree (commonly known as a trie)
 https://en.wikipedia.org/wiki/Trie
 */
 
+/*
+//Node constructor
+  //this.value
+  //this.children = [];
+//Costructor func, takes value
+    new Node(value)
+    set root, node
+*/
+
 function Tree (value) {
     // implement me...
   }

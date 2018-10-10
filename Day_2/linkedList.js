@@ -94,6 +94,11 @@ LinkedList.prototype.forEach = function(callback) {
 LinkedList.prototype.print = function() {
   var parent = this.head;
   var outStrArr = [];
+  /*
+  this.forEach(function(value) {
+    outStrArr.push(value);
+  })
+  */
   while (true) {
     if (parent.next === null) break;
     outStrArr.push(parent.value);

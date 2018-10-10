@@ -150,9 +150,14 @@ QueueLL.prototype.findNode = function(value) {
 
 //V // 3. Write a method that remove duplicates from an unsorted linked list. What is the time complexity? Re-implement the method without using any additional storage structure (constant space complexity). What is the time complexity?
 //V // 4. Reverse a linked list. Do not use any additional storage structures.
-//X // 5. Find the kth to last element of a singly linked list.
-//X // 6. Detect if a linked list has a loop.
-//X // 7. Check if a linked list is a palindrome.
+//V // 5. Find the kth to last element of a singly linked list.
+//V // 6. Detect if a linked list has a loop.
+//V // 7. Check if a linked list is a palindrome.
+//X // 8. Given two linked lists that represent numbers, return a linked list that represents the sum of those numbers:
+//   4 2 5        (4 -> 2 -> 5)
+// + 7 3 1        (7 -> 3 -> 1)
+// --------
+// 1 1 5 6   (1 -> 1 -> 5 -> 6)
 
 function Node(value) {
     this.next = null;
@@ -212,7 +217,6 @@ LinkedList.prototype.removeAfter = function(refNode) {
 
 LinkedList.prototype.insertHead = function(value) {
   var newHead = new Node(value);
-  console.log(this.head);
   newHead.next = this.head;
   this.head = newHead;
 };
@@ -332,9 +336,95 @@ LinkedList.prototype.reverseList = function() {
   this.head = prevP;
 };
 
+LinkedList.prototype.nthToLastElement = function (n) {
+  var curr = this.head;
+  var follower = this.head;
+
+  for(var i = 0 ; i < n; i++) {
+    if (curr === null) return null;
+    curr = curr.next
+  }
+  while (curr && curr.next !== null) {
+    curr = curr.next
+    follower = follower.next;
+  }
+  return follower;
+}
+//Time complexity O(n^2)
+
+LinkedList.prototype.checkIfLoop = function () {
+  var curr = this.head;
+  var storage = {}
+
+  function inStorage(checkNode) {
+    var inStore = false;
+    if (storage.length === 0) return false;
+    for(node in storage) {
+      if (storage[node] === checkNode) inStore = true;
+    }
+    return inStore;
+  }
+
+  while (curr && curr.next !== null) {
+    if (!inStorage(curr)) storage[curr.value] = curr;
+    else return true;
+    curr = curr.next;
+    if (curr === null) return false;
+  } 
+  return false;
+}
+
+LinkedList.prototype.isPalindrome = function () {
+  var reducedValue = this.print().split(',').join('');
+  console.log(reducedValue);
+  this.reverseList();
+  var reducedValueReverse = this.print().split(',').join('');
+  console.log(reducedValueReverse);
+  if (reducedValue === reducedValueReverse) return true;
+  else return false;
+}
+
+LinkedList.prototype.sumListsValues = function (first, second) {
+  // console.log(first.print())
+  // console.log(second.print())
+  var firstP = first.head;
+  var secondP = second.head;
+  var sum = 0;
+  var carry = 0;
+  var res = null;
+  var curRes = null;
+  var tmp = null;
+  while(firstP !== null && secondP !== null) {
+    sum = carry + (firstP ? firstP.value : 0) + (secondP ? secondP.value : 0);
+    carry = (sum >= 10 ? 1 : 0);
+    sum = sum % 10;
+    // tmp = new Node(sum);
+
+    if(res === null) res = new LinkedList(sum);
+    else res.insertHead(sum);
+
+    // curRes = tmp;
+
+    if(firstP) firstP = firstP.next;
+    if(secondP) secondP = secondP.next;
+  }
+  if (carry > 0 ) res.insertHead(carry);
+  // while(res !== null) {
+  //   console.log(res.value);
+  //   res = res.next;
+  // }
+  console.log(res.print());
+
+  return
+}
+
+
+
+
 var ll = new LinkedList(1);
 
-// 3.
+// 3. Write a method that remove duplicates from an unsorted linked list. What is the time complexity? Re-implement the method without using any additional storage structure (constant space complexity). What is the time complexity?
+
 // ll.appendToTail(1)
 // ll.appendToTail(1)
 // ll.appendToTail(1)
@@ -352,7 +442,7 @@ var ll = new LinkedList(1);
 // ll.removeDuplicates()
 // console.log(ll.print())
 
-// 4.
+// 4. Reverse a linked list. Do not use any additional storage structures.
 
 // ll.appendToTail(2)
 // ll.appendToTail(3)
@@ -365,4 +455,59 @@ var ll = new LinkedList(1);
 // ll.reverseList();
 // console.log(ll.print())
 
-// 5.
+// 5.  5. Find the kth to last element of a singly linked list.
+
+// ll.appendToTail(2)
+// ll.appendToTail(3)
+// ll.appendToTail(4)
+// ll.appendToTail(5)
+// ll.appendToTail(6)
+// ll.appendToTail(7)
+// ll.appendToTail(8)
+
+// console.log(ll.nthToLastElement(7))
+
+
+// 6. Detect if a linked list has a loop.
+// ll.appendToTail(2)
+// ll.appendToTail(3)
+// ll.appendToTail(4)
+// ll.appendToTail(5)
+// ll.appendToTail(6)
+// ll.appendToTail(7)
+// ll.appendToTail(8)
+// // ll.tail.next = ll.head.next.next.next;
+
+// console.log(ll.checkIfLoop());
+
+// 7. Check if a linked list is a palindrome.
+// var ll = new LinkedList('r');
+// ll.appendToTail('a')
+// ll.appendToTail('c')
+// ll.appendToTail('e')
+// ll.appendToTail('c')
+// ll.appendToTail('a')
+// ll.appendToTail('r')
+
+// console.log(ll.isPalindrome())
+
+
+// 8. Given two linked lists that represent numbers, return a linked list that represents the sum of those numbers:
+//   4 2 5        (4 -> 2 -> 5)
+// + 7 3 1        (7 -> 3 -> 1)
+// --------
+// 1 1 5 6   (1 -> 1 -> 5 -> 6)
+
+// var ll1 = new LinkedList(4);
+
+// ll1.insertHead(2)
+// ll1.insertHead(5)
+
+// var ll2 = new LinkedList(7);
+
+// ll2.insertHead(3)
+// ll2.insertHead(1)
+
+// LinkedList.prototype.sumListsValues(ll1, ll2);
+
+
