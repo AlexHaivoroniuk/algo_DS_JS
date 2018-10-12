@@ -37,29 +37,54 @@ https://en.wikipedia.org/wiki/Trie
     set root, node
 */
 
+// N-ary Tree
 function Tree (value) {
-    // implement me...
+  this.value = value;
+  this.children = [];
+}
+  
+Tree.prototype.addChild = function(value) {
+  var child = new Tree(value);
+  this.children.push(child)
+
+  return child;
+};
+// Time complexity:
+
+
+Tree.prototype.contains = function(value) {
+  var contains = false;
+  if (this.value === value) return true;
+  else if (this.children.length > 0) {
+    this.children.forEach(el => {
+      contains = el.contains(value) ? true : contains;
+    });
   }
-  
-  Tree.prototype.addChild = function(value) {
-    // implement me...
-  };
-  // Time complexity:
-  
-  
-  Tree.prototype.contains = function(value) {
-    // implement me...
-  };
-  // Time complexity:
-  
-  
-  Tree.prototype.traverseDepthFirst = function(fn) {
-    // implement me...
-  };
-  // Time complexity:
-  
-  
-  Tree.prototype.traverseBreadthFirst = function(fn) {
-    // implement me...
-  };
-  // Time complexity:
+  return contains;
+};
+// Time complexity:
+
+
+Tree.prototype.traverseDepthFirst = function(fn) {
+  // implement me...
+};
+// Time complexity:
+
+
+Tree.prototype.traverseBreadthFirst = function(fn) {
+  // implement me...
+};
+// Time complexity:
+
+var tree = new Tree(0);
+var branch1 = tree.addChild(1);
+var branch2 = tree.addChild(2);
+var branch3 = tree.addChild(3);
+
+branch1.addChild(5)
+branch2.addChild(6)
+branch3.addChild(7).addChild(8)
+
+console.log(tree.contains(8))
+
+
