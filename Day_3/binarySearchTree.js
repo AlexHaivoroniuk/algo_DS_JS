@@ -147,6 +147,8 @@ BinarySearchTree.prototype.insert = function(value) {
     } else if (value > this.value) {
         if (this.right) this.right.insert(value)
         else this.right = new BinarySearchTree(value)
+    } else if (this.value === null) {
+        this.value === value;
     }
 };
 // Time complexity: O(log n)
@@ -303,32 +305,47 @@ BinarySearchTree.prototype.deleteNode = function(val) {
     var self = this;
 
 
-    function findMin(curr, parent) {
-        if (curr.left) return findMin(curr.left, curr);
+    function findMin(curr, parent, currRefs) {
+        if (curr.left) return findMin(curr.left, curr, currRefs);
         else {
-            parent.left = null;
+            if ( parent && parent.right !== curr )  {
+                parent.left = null;
+                curr.left = currRefs.l;
+                curr.right = currRefs.r;
+            } else {
+                curr.left = currRefs.l;
+            }
             return curr;
         }; 
     }
 
     function del(val, curr, parent) {
         var prdn = null;
-        if (curr.value === self._root) { // then its root
-            console.log('its a root');
-            curr = findMin(curr.right, curr);
-        } else {
+        
+        if (parent) {
             if (val > parent.value) prdn = 'right';
             else prdn = 'left';
         }
+        // root case
+        if (curr.value === self._root) { // then its root
+            if (curr.right) {
+                curr = findMin(curr.right, curr, { l: curr.left, r: curr.right });
+            } else if (curr.left) {
+                curr = curr.left;
+            } else {
+                curr.value = null;
+            }
+        }
         // Case 1
-        if (!curr.left && !curr.right) { // then its a leaf
+        else if (!curr.left && !curr.right) { // then its a leaf
             parent[prdn] = null;
             prdn = null;
         }
         // Case 3
         else if (curr.left && curr.right) { // has both children (curr.left && curr.right) replace with successor
             //find the right min
-            parent[prdn] = findMin(curr.right, curr); 
+            var currRefs = { l: curr.left, r: curr.right}; 
+            parent[prdn] = findMin(curr.right, curr, currRefs);
         }
         // Case 2
         else if (curr.left || curr.right) { // then it has one child
@@ -339,7 +356,11 @@ BinarySearchTree.prototype.deleteNode = function(val) {
     }
 
     function search(val, curr, parent) {
-        if (val === curr.value) {
+        if (!curr) {
+            console.log('No such node in tree');
+            return;
+        }
+        else if (val === curr.value) {
             del(val, curr, parent);
         }
         else if (val > curr.value) search(val, curr.right, curr);
@@ -382,6 +403,20 @@ bst.insert(25);
 // bst.deleteMin()
 // bst.deleteMax()
 bst.deleteNode(7);
+bst.deleteNode(15);
+bst.deleteNode(18);
+bst.deleteNode(8);
+// bst.deleteNode(6);
+// bst.deleteNode(9);
+// bst.deleteNode(10);
+// bst.deleteNode(5);
+// bst.deleteNode(3);
+// // bst.deleteNode(20);
+// // bst.deleteNode(25);
+// // bst.deleteNode(13);
+// // bst.deleteNode(12);
+// // bst.deleteNode(14);
+// // bst.deleteNode(11);
 bst.traverseDepthFirst_inOrder((v) => {
     console.log(v.value);
 })
