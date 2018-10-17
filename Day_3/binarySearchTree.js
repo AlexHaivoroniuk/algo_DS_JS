@@ -329,9 +329,22 @@ BinarySearchTree.prototype.deleteNode = function(val) {
         // root case
         if (curr.value === self._root) { // then its root
             if (curr.right) {
-                curr = findMin(curr.right, curr, { l: curr.left, r: curr.right });
+                curr = findMin(curr.right, curr, { l: this._root.left, r: this._root.right });
+                this._root = curr;
             } else if (curr.left) {
-                curr = curr.left;
+                var replacement = curr.left;
+                var replaceParent = curr;
+                while (replacement.right !== null) {
+                    replaceParent = replacement;
+                    replacement = replacement.right;
+                }
+                
+                replaceParent.right = replacement.left;
+                
+                replacement.left = this._root.left;
+                replacement.right = this._root.right;
+
+                this._root = replacement;
             } else {
                 curr.value = null;
             }
@@ -429,3 +442,64 @@ bst.traverseDepthFirst_inOrder((v) => {
 // bst.traverseDepthFirst_postOrder((v) => {
 //     console.log(v.value);
 // })
+
+
+// particle solution for the found value
+// if (found) {
+//     childCount = (current.left !== null ? 1 : 0) + (current.right !== null ? 1 :0);
+
+//     // special case
+//     if (current === this._root) {
+//         switch(childCount) {
+//             case 2: 
+//                 replacement = this._root.left;
+//                 break;
+//             case 1:
+//                 break; 
+//             case 0:
+//                 break;
+//         }
+//         while (replacement.right !== null) {
+//             replacementParent = replacement;
+//             replacement = replacement.right;
+//         }
+
+//         if (replacementParent !== null) {
+//             replacementParent.right = replacement.left;
+
+//             replacement.right = this._root.right;
+//             replacement.left = this._root.left;
+//         } else {
+//             replacement.right = this._root.right;
+//         }
+
+//         this._root = replacement;
+
+//     // not root values
+//     } else {    
+//         switch (childCount) {
+//             case 2: 
+//                 replacement = current.left;
+//                 replacementParent = current;
+
+//                 while(replacement.right !== null) {
+//                     replacementParent = replacement;
+//                     replacement = replacement.right;
+//                 }
+
+//                 replacementParent.right = replacement.left;
+
+//                 //assign children 
+//                 replacement.right = current.right;
+//                 replacement.left = current.left;
+
+//                 //place the replacement to the right spot
+//                 if (current.value < parent.value) {
+//                     parent.left = replacement;
+//                 } else {
+//                     parent.right = replacement;
+//                 }
+//             // no default
+//         }
+//     }
+// }

@@ -66,13 +66,23 @@ Tree.prototype.contains = function(value) {
 
 
 Tree.prototype.traverseDepthFirst = function(fn) {
-  // implement me...
+  this.children.forEach((child) => {
+    child.traverseDepthFirst(fn)
+  });
+  fn(this);
 };
 // Time complexity:
 
 
 Tree.prototype.traverseBreadthFirst = function(fn) {
-  // implement me...
+  var queue = [this];
+  while (queue.length) {
+    var node = queue.shift();
+    fn(node.value);
+    node.children.forEach(child => {
+      queue.push(child);  
+    });
+  }
 };
 // Time complexity:
 
@@ -86,5 +96,4 @@ branch2.addChild(6)
 branch3.addChild(7).addChild(8)
 
 console.log(tree.contains(8))
-
-
+tree.traverseBreadthFirst(val => console.log(val));
