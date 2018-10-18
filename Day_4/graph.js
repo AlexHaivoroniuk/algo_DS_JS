@@ -119,7 +119,12 @@ Graph.prototype.addNode = function(value) {
 // Time complexity:
 
 Graph.prototype.removeNode = function(value) {
-  // implement me...
+  this._nodes[value].forEach(neighbor => {
+    var neighborsNeighbors = this._nodes[neighbor];
+    var index = neighborsNeighbors.indexOf(value);
+    neighborsNeighbors.splice(index, 1); 
+  })
+  delete this._nodes[value];
 };
 // Time complexity:
 
@@ -137,7 +142,11 @@ Graph.prototype.addEdge = function(value1, value2) {
 // Time complexity:
 
 Graph.prototype.removeEdge = function(value1, value2) {
-  // implement me...
+  if (!this._nodes[value1] || !this._nodes[value2]) return 'Invalid node value';
+  var value1Neighbors = this._nodes[value1];
+  value1Neighbors.splice(value1Neighbors.indexOf(value2), 1);
+  var value2Neighbors = this._nodes[value2];
+  value2Neighbors.splice(value2Neighbors.indexOf(value1), 1);
 };
 // Time complexity:
 
@@ -147,7 +156,9 @@ Graph.prototype.hasEdge = function(value1, value2) {
 // Time complexity:
 
 Graph.prototype.forEach = function(fn) {
-  // implement me...
+  for (var node in this._nodes) {
+    fn(node, this._nodes[node], this._nodes);
+  }
 };
 // Time complexity:
 
@@ -157,7 +168,7 @@ DFS
       (1) _____ (3)
       /         /
     (2) _______(4)  (6) 
-              \    /
+               \    /
                 \  /
                 (5) 
 
@@ -219,22 +230,38 @@ Graph.prototype.traverseBreadthFirst = function(value, fn) {
   if (!this._nodes[value] || typeof fn !== 'function') return 'Invalid value or function';
   var visited = {};
   var queue = [value];
-  visited[value] = 0;
 
-  var recurseBF = (value, fn) => {
-    visited.push(value);
-    while (queue.length) {
-        var node = queue.shift();
-        console.log(node);
-        this._nodes[value].forEach(neighbor => {
-          if (visited.includes(neighbor)) return;  
-          queue.push(neighbor);
-        });
-    }
+  while (queue.length) {
+    var node = queue.shift();
+    fn(node);
+    visited[node] = true;
+    this._nodes[node].forEach(neighbor => {
+      if (visited[neighbor] || queue.includes(neighbor)) return;  
+      queue.push(neighbor);
+    });
   }
-
-  recurseBF(value, fn);
 };
+
+/*
+Graph.prototype.traverseBreadthFirst = function(value, fn) {
+  if (!this._nodes[value] || typeof fn !== 'function') return 'Invalid value or function';
+  var visited = {};
+  var queue = [value];
+  visited[value] = 0;
+  while (queue.length) {
+    var node = queue.shift();
+    fn(node, visited[node]);
+    var neighbors = this._nodes[node].filter(function(neighbor) {
+      if (visited[neighbor] === undefined) {
+        visited[neighbor] = visited[node]+1;
+        return true;
+      }
+    });
+    queue = queue.concat(neighbors);
+  }
+};
+
+*/
 // Time complexity:
 
 var g = new Graph();
@@ -276,5 +303,5 @@ g.addEdge(3, 5);
 
 var traverseBF = [];
 g.traverseBreadthFirst(1, function(val) { traverseBF.push(val) });
-// console.log(traverseBF);
+console.log(traverseBF);
 // traverseBF should be [ [ 1, 0 ], [ 2, 1 ], [ 4, 1 ], [ 3, 2 ], [ 5, 3 ] ]
