@@ -385,12 +385,26 @@ BinarySearchTree.prototype.deleteNode = function(val) {
 // Time complexity:
 
 BinarySearchTree.prototype.checkIfFull = function() {
-// implement me...
+  var result = true;
+  this.traverseBreadthFirst(function(node) {
+    if (!node.left && node.right) result = false;
+    else if (node.left && !node.right) result = false;
+  });
+  return result;
 };
 // Time complexity:
 
 BinarySearchTree.prototype.checkIfBalanced = function() {
-// implement me...
+  var heights = [];
+  var recurse = function(node, height) {
+    if (!node.left && !node.right) return heights.push(height);
+    node.left && recurse(node.left, height+1);
+    node.right && recurse(node.right, height+1);
+  };
+  recurse(this, 1);
+  var min = Math.min.apply(null, heights);
+  var max = Math.max.apply(null, heights);
+  return max-min <= 1;
 };
 // Time complexity:
 
